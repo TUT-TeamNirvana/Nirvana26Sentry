@@ -31,9 +31,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91b6e91d-48e2-495a-befe-db6457101e9b" name="Changes" comment="2026赛季新熊猫，pitch待调参">
+    <list default="true" id="91b6e91d-48e2-495a-befe-db6457101e9b" name="Changes" comment="2026赛季新熊猫，pitch调参完毕">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/gimbal/gimbal.c" beforeDir="false" afterPath="$PROJECT_DIR$/application/gimbal/gimbal.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,13 +63,12 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/Nirvana26Sentry/Src/freertos.c" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/Nirvana26Sentry/Src/freertos.c" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/Nirvana26Sentry/Src/syscalls.c" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/Nirvana26Sentry/Src/syscalls.c" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/Nirvana26Sentry/Src/sysmem.c" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/Nirvana26Sentry/Src/sysmem.c" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/Nirvana26Sentry/application/gimbal/gimbal.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/application/gimbal/gimbal.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/application/gimbal/gimbal.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/application/gimbal/gimbal.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/application/gimbal/gimbal.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/application/gimbal/gimbal.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/RMthings/2026届Robomaster/2026赛季步兵/26赛季代码/Nirvana26Sentry/application/gimbal/gimbal.c" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/robot.c" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/bsp/can/bsp_can.c" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/bsp/can/bsp_can.h" root0="FORCE_HIGHLIGHTING" />
@@ -123,6 +121,11 @@
   }
 }</component>
   <component name="RunManager" selected="OpenOCD 下载并运行.26步兵熊猫">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="basic_framework.elf" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="basic_framework" TARGET_NAME="basic_framework.elf" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="basic_framework" RUN_TARGET_NAME="basic_framework.elf">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -170,7 +173,8 @@
       <workItem from="1774447543025" duration="1000" />
       <workItem from="1774448376969" duration="28000" />
       <workItem from="1774448503913" duration="891000" />
-      <workItem from="1774449591551" duration="1000" />
+      <workItem from="1774449591551" duration="1865000" />
+      <workItem from="1774513242570" duration="214000" />
     </task>
     <task id="LOCAL-00001" summary="2026赛季熊猫，工具链转为clion+cmake">
       <option name="closed" value="true" />
@@ -308,7 +312,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774448535898</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="2026赛季新熊猫，pitch调参完毕">
+      <option name="closed" value="true" />
+      <created>1774451472617</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1774451472617</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -346,6 +358,7 @@
     <MESSAGE value="2026赛季新熊猫，视觉自瞄控制逻辑优化，防止突然断掉minipc出现疯车问题" />
     <MESSAGE value="2026赛季新熊猫，视觉自瞄控制逻辑优化，防止突然断掉minipc出现疯车问题,重力补偿重新调参完成" />
     <MESSAGE value="2026赛季新熊猫，pitch待调参" />
-    <option name="LAST_COMMIT_MESSAGE" value="2026赛季新熊猫，pitch待调参" />
+    <MESSAGE value="2026赛季新熊猫，pitch调参完毕" />
+    <option name="LAST_COMMIT_MESSAGE" value="2026赛季新熊猫，pitch调参完毕" />
   </component>
 </project>
