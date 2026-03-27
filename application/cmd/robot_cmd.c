@@ -17,7 +17,7 @@
 // 私有宏,自动将编码器转换成角度值
 #define YAW_ALIGN_ANGLE (YAW_CHASSIS_ALIGN_ECD * ECD_ANGLE_COEF_DJI) // 对齐时的角度,0-360
 #define PTICH_HORIZON_ANGLE (PITCH_HORIZON_ECD * ECD_ANGLE_COEF_DJI) // pitch水平时电机的角度,0-360
-#define shoot_frequency 8 //射击频率
+#define shoot_frequency 16 //射击频率
 /* cmd应用包含的模块实例指针和交互信息存储*/
 #ifdef GIMBAL_BOARD // 对双板的兼容,条件编译
 #include "can_comm.h"
@@ -476,14 +476,14 @@ static void MouseKeySet()
         if (use_manual_mouse == 1)
         {
             gimbal_cmd_send.yaw -= 0.01f * (float)rc_data[TEMP].mouse.x;
-            gimbal_cmd_send.pitch -= 0.01f * (float)rc_data[TEMP].mouse.y;
+            gimbal_cmd_send.pitch += 0.01f * (float)rc_data[TEMP].mouse.y;
         }
     }
     else
     {
         // 常规鼠标控制
         gimbal_cmd_send.yaw -= 0.01f * (float)rc_data[TEMP].mouse.x;
-        gimbal_cmd_send.pitch -= 0.01f * (float)rc_data[TEMP].mouse.y;
+        gimbal_cmd_send.pitch += 0.01f * (float)rc_data[TEMP].mouse.y;
     }
 
     // ========== 防疯车安全限幅 ==========
