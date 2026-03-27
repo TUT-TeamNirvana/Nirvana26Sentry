@@ -430,82 +430,72 @@ static void MouseKeySet()
     chassis_cmd_send.vx = rc_data[TEMP].key[KEY_PRESS].d * chassis_cmd_send.chassis_speed_buff - rc_data[TEMP].key[KEY_PRESS].a * chassis_cmd_send.chassis_speed_buff; // 系数待测
     chassis_cmd_send.vy = rc_data[TEMP].key[KEY_PRESS].w * chassis_cmd_send.chassis_speed_buff - rc_data[TEMP].key[KEY_PRESS].s * chassis_cmd_send.chassis_speed_buff;
 
+    uint8_t vision_fire = 0; // 用于视觉开火仲裁的标志位
+
+    // 当按下鼠标右键时，尝试使用视觉自瞄
     if (rc_data[TEMP].mouse.press_r == 1)
     {
         // 默认开启鼠标手动控制标志位
         uint8_t use_manual_mouse = 1;
 
-        // 当按下鼠标右键时，尝试使用视觉自瞄
-        if (rc_data[TEMP].mouse.press_r == 1)
+        // 确保视觉通信正常且有数据帧
+        if (vision_recv != NULL)
         {
-            // 确保视觉通信正常且有数据帧
-            if (vision_recv != NULL)
+            InputData_t *vision_input = &vision_recv->input_data;
+
+            // 检查视觉是否有有效目标（只要yaw和pitch不是纯0就认为扫到了目标）
+            if (vision_input->shoot_yaw != 0.0f || vision_input->shoot_pitch != 0.0f)
             {
-                InputData_t *vision_input = &vision_recv->input_data;
+                // 1. 视觉发送的是世界坐标系下的绝对角度（弧度制），先转换为角度制
+                float target_yaw_deg = vision_input->shoot_yaw * 57.2957795f;
 
-                // 检查视觉是否有有效目标（只要yaw和pitch不是纯0就认为扫到了目标）
-                if (vision_input->shoot_yaw != 0.0f || vision_input->shoot_pitch != 0.0f)
-                {
-                    // 视觉接管云台姿态
-                    //gimbal_cmd_send.yaw = vision_input->shoot_yaw;
-                    //gimbal_cmd_send.pitch = vision_input->shoot_pitch;
+                // 2. C板的 gimbal_cmd_send.yaw 是连续的多圈角度，需要计算最短路径偏差（避免360度乱甩和倒卷）
+                float yaw_error = target_yaw_deg - fmodf(gimbal_cmd_send.yaw, 360.0f);
+                while (yaw_error > 180.0f) yaw_error -= 360.0f;
+                while (yaw_error <= -180.0f) yaw_error += 360.0f;
 
-                    // 1. 视觉发送的是世界坐标系下的绝对角度（弧度制），先转换为角度制
-                    float target_yaw_deg = vision_input->shoot_yaw * 57.2957795f;
+                // 3. 将最短路径偏差累加上去
+                gimbal_cmd_send.yaw += yaw_error;
 
-                    // 2. C板的 gimbal_cmd_send.yaw 是连续的多圈角度，需要计算最短路径偏差（避免360度乱甩和倒卷）
-                    float yaw_error = target_yaw_deg - fmodf(gimbal_cmd_send.yaw, 360.0f);
-                    while (yaw_error > 180.0f) yaw_error -= 360.0f;
-                    while (yaw_error <= -180.0f) yaw_error += 360.0f;
+                // Pitch轴由于不会跨越360度，直接赋值即可
+                gimbal_cmd_send.pitch = vision_input->shoot_pitch * 57.2957795f;
 
-                    // 3. 将最短路径偏差累加上去
-                    gimbal_cmd_send.yaw += yaw_error;
-
-                    // Pitch轴由于不会跨越360度，直接赋值即可
-                    gimbal_cmd_send.pitch = vision_input->shoot_pitch * 57.2957795f;
-
-
-                    // 视觉接管开火
-                    if (vision_input->fire == 1) {
-                        shoot_cmd_send.load_mode = LOAD_1_BULLET; // 视需求也可改为连发
-                    } else {
-                        shoot_cmd_send.load_mode = LOAD_STOP;
-                    }
-
-                    // 视觉接管成功，关闭手动鼠标控制
-                    use_manual_mouse = 0;
+                // 视觉接管开火标志
+                if (vision_input->fire == 1) {
+                    vision_fire = 1;
                 }
-                else
-                {
-                    // 视觉有数据传过来，但是全是0（目标丢失），强行停火
-                    shoot_cmd_send.load_mode = LOAD_STOP;
-                }
+
+                // 视觉接管成功，关闭手动鼠标控制
+                use_manual_mouse = 0;
             }
         }
 
         // ========== 姿态解算 ==========
-
         // 如果没有按下右键，或者视觉没插上，或者按了右键但视觉没扫到目标
         // 统一退回到常规鼠标控制
         if (use_manual_mouse == 1)
         {
             gimbal_cmd_send.yaw -= 0.01f * (float)rc_data[TEMP].mouse.x;
-            gimbal_cmd_send.pitch += 0.01f * (float)rc_data[TEMP].mouse.y;
-        }
-
-        // ========== 终极防疯车安全限幅 ==========
-
-        // 无论是视觉算出来的pitch，还是鼠标滑出来的pitch，绝不允许越界！
-        if (gimbal_cmd_send.pitch > 50)
-        {
-            gimbal_cmd_send.pitch = 50;
-        }
-        if (gimbal_cmd_send.pitch < -20)
-        {
-            gimbal_cmd_send.pitch = -20;
+            gimbal_cmd_send.pitch -= 0.01f * (float)rc_data[TEMP].mouse.y;
         }
     }
+    else
+    {
+        // 常规鼠标控制
+        gimbal_cmd_send.yaw -= 0.01f * (float)rc_data[TEMP].mouse.x;
+        gimbal_cmd_send.pitch -= 0.01f * (float)rc_data[TEMP].mouse.y;
+    }
 
+    // ========== 终极防疯车安全限幅 ==========
+    // 无论是视觉算出来的pitch，还是鼠标滑出来的pitch，绝不允许越界！
+    if (gimbal_cmd_send.pitch > 50)
+    {
+        gimbal_cmd_send.pitch = 50;
+    }
+    if (gimbal_cmd_send.pitch < -20)
+    {
+        gimbal_cmd_send.pitch = -20;
+    }
 
     switch (rc_data[TEMP].key_count[KEY_PRESS][Key_R] % 2) // R键开关弹舱
     {
@@ -522,18 +512,6 @@ static void MouseKeySet()
         rc_data[TEMP].key_count[KEY_PRESS][Key_R] = 0;
     }
     
-    // switch (rc_data[TEMP].key[KEY_PRESS].f) // F键开关摩擦轮
-    // {
-    // case 0:
-    //     shoot_cmd_send.friction_mode = FRICTION_OFF;
-    //     shoot_cmd_send.bullet_speed = 0;
-    //     break;
-    
-    // default:
-    //     shoot_cmd_send.friction_mode = FRICTION_ON;
-    //     shoot_cmd_send.bullet_speed = 30;
-    //     break;
-    // }
     if (rc_data[TEMP].key[KEY_PRESS].f == 1)
     {
         shoot_cmd_send.friction_mode = FRICTION_ON;
@@ -545,7 +523,6 @@ static void MouseKeySet()
         shoot_cmd_send.bullet_speed = 0;
     }
     
-    
     switch (rc_data[TEMP].key[KEY_PRESS].shift) // 小陀螺
     {
     case 1:
@@ -553,10 +530,8 @@ static void MouseKeySet()
         break;
 
     default:
-        
         break;
     }
-
     
     switch (rc_data[TEMP].key[KEY_PRESS].ctrl)
     {
@@ -565,28 +540,19 @@ static void MouseKeySet()
         break;
     
     default:
-
         break;
     }
-    if (rc_data[TEMP].mouse.press_l == 0)
-    {
-        shoot_cmd_send.load_mode = LOAD_STOP;
-    }
-    switch (rc_data[TEMP].key[KEY_PRESS].c) // C键设置播弹盘反转
-    {
-    case 0:
 
-        break;
-
-    default:
+    // 统一的发弹仲裁逻辑 (仲裁视觉开火、手动左键和C键反转)
+    if (rc_data[TEMP].key[KEY_PRESS].c == 1) // 最高优先级：C键排卡反转
+    {
         shoot_cmd_send.load_mode = LOAD_REVERSE;
         shoot_cmd_send.shoot_rate = shoot_frequency;
         shoot_cmd_send.shoot_num = 0;
-        break;
     }
-    if (rc_data[TEMP].mouse.press_l == 1)
+    else if (rc_data[TEMP].mouse.press_l == 1) // 次高优先级：玩家按下左键，无条件进入手动发弹
     {
-        switch (rc_data[TEMP].key_count[KEY_PRESS][Key_Z]%2) // z键设置发射模式
+        switch (rc_data[TEMP].key_count[KEY_PRESS][Key_Z] % 2) // z键设置发射模式 (连发/单发)
         {
         case 0:
             shoot_cmd_send.load_mode = LOAD_BURSTFIRE;
@@ -604,7 +570,16 @@ static void MouseKeySet()
             break;
         }
     }
-    
+    else if (vision_fire == 1) // 视觉自动开火模式保持
+    {
+        shoot_cmd_send.load_mode = LOAD_1_BULLET; // 视需求也可改为连发 (LOAD_BURSTFIRE)
+        shoot_cmd_send.shoot_num = 1;
+    }
+    else // 最低优先级：停火
+    {
+        shoot_cmd_send.load_mode = LOAD_STOP;
+        shoot_cmd_send.shoot_rate = 0;
+    }
 }
 
 /**
