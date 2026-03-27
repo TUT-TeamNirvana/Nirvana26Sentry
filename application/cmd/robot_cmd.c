@@ -486,8 +486,7 @@ static void MouseKeySet()
         gimbal_cmd_send.pitch -= 0.01f * (float)rc_data[TEMP].mouse.y;
     }
 
-    // ========== 终极防疯车安全限幅 ==========
-    // 无论是视觉算出来的pitch，还是鼠标滑出来的pitch，绝不允许越界！
+    // ========== 防疯车安全限幅 ==========
     if (gimbal_cmd_send.pitch > 50)
     {
         gimbal_cmd_send.pitch = 50;
@@ -550,7 +549,7 @@ static void MouseKeySet()
         shoot_cmd_send.shoot_rate = shoot_frequency;
         shoot_cmd_send.shoot_num = 0;
     }
-    else if (rc_data[TEMP].mouse.press_l == 1) // 次高优先级：玩家按下左键，无条件进入手动发弹
+    else if (rc_data[TEMP].mouse.press_l == 1) // 次高优先级：按下左键，无条件进入手动发弹
     {
         switch (rc_data[TEMP].key_count[KEY_PRESS][Key_Z] % 2) // z键设置发射模式 (连发/单发)
         {

@@ -31,8 +31,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91b6e91d-48e2-495a-befe-db6457101e9b" name="Changes" comment="2026赛季新熊猫，添加vt3遥控控制拨弹盘和摩擦轮，并且不影响dt7和键鼠操作">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="91b6e91d-48e2-495a-befe-db6457101e9b" name="Changes" comment="2026赛季新熊猫，修复键鼠遥控右键卡死正常操控的bug">
+      <change beforePath="$PROJECT_DIR$/application/cmd/robot_cmd.c" beforeDir="false" afterPath="$PROJECT_DIR$/application/cmd/robot_cmd.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,11 +121,6 @@
   }
 }</component>
   <component name="RunManager" selected="OpenOCD 下载并运行.26步兵熊猫">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="basic_framework.elf" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="basic_framework" TARGET_NAME="basic_framework.elf" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="basic_framework" RUN_TARGET_NAME="basic_framework.elf">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -177,6 +172,7 @@
       <workItem from="1774513242570" duration="214000" />
       <workItem from="1774545033104" duration="1003000" />
       <workItem from="1774580133033" duration="14000" />
+      <workItem from="1774634194843" duration="3594000" />
     </task>
     <task id="LOCAL-00001" summary="2026赛季熊猫，工具链转为clion+cmake">
       <option name="closed" value="true" />
@@ -330,7 +326,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774545750390</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="2026赛季新熊猫，修复键鼠遥控右键卡死正常操控的bug">
+      <option name="closed" value="true" />
+      <created>1774638462242</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1774638462242</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -370,6 +374,7 @@
     <MESSAGE value="2026赛季新熊猫，pitch待调参" />
     <MESSAGE value="2026赛季新熊猫，pitch调参完毕" />
     <MESSAGE value="2026赛季新熊猫，添加vt3遥控控制拨弹盘和摩擦轮，并且不影响dt7和键鼠操作" />
-    <option name="LAST_COMMIT_MESSAGE" value="2026赛季新熊猫，添加vt3遥控控制拨弹盘和摩擦轮，并且不影响dt7和键鼠操作" />
+    <MESSAGE value="2026赛季新熊猫，修复键鼠遥控右键卡死正常操控的bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="2026赛季新熊猫，修复键鼠遥控右键卡死正常操控的bug" />
   </component>
 </project>
